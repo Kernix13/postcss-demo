@@ -1,0 +1,25 @@
+# Dependencies
+/node_modules
+
+# Production
+/dist
+
+### VisualStudioCode ###
+.vscode/*
+
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Numerous always-ignore extensions
+*.diff
+*.env
+*.err
+*.log
+*.sass-cache
+*.tmp
+
+# Personal
+notes.md

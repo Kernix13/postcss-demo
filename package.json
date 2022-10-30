@@ -1,0 +1,25 @@
+{
+  "name": "postcss-demo-setup",
+  "version": "1.0.0",
+  "description": "Frm Brad Traversy video PostCSS Crash Course, Oct 26, 2022",
+  "main": "index.js",
+  "scripts": {
+    "watch:css": "postcss src/input.css -o dist/style.css -w",
+    "build:css": "postcss src/input.css -o dist/style.css"
+  },
+  "keywords": [
+    "PostCSS"
+  ],
+  "author": "Jim Kernicky",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "cssnano": "^5.1.14",
+    "postcss": "^8.4.18",
+    "postcss-assets": "^6.0.0",
+    "postcss-cli": "^10.0.0",
+    "postcss-import": "^15.0.0",
+    "postcss-preset-env": "^7.8.2",
+    "precss": "^4.0.0"
+  }
+}

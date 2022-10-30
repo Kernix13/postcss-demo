@@ -1,0 +1,9 @@
+.card {
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+  border: $borderWidth solid $borderColor;
+
+  h2 {
+    color: green;
+  }
+}

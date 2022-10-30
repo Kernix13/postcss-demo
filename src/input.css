@@ -1,0 +1,33 @@
+@import "vars";
+@import "card";
+@custom-selector :--heading h1, h2, h3, h4, h5;
+@custom-media --viewport-small (width <= 500px);
+
+body {
+  background-color: $lightColor;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.container {
+  margin: 0 auto;
+  width: 80%;
+  max-width: 1100px;
+}
+:--heading {
+  @media (--viewport-small) {
+    font-size: 2.5rem;
+    color: red;
+  }
+}
+
+input::placeholder {
+  color: steelblue;
+}
+
+.logo {
+  display: block;
+  margin-top: 2rem;
+  width: 10%;
+  height: auto;
+}
