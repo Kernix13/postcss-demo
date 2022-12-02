@@ -1,7 +1,7 @@
 {
   "name": "postcss-demo-setup",
   "version": "1.0.0",
-  "description": "Frm Brad Traversy video PostCSS Crash Course, Oct 26, 2022",
+  "description": "From Brad Traversy video PostCSS Crash Course, Oct 26, 2022",
   "main": "index.js",
   "scripts": {
     "watch:css": "postcss src/input.css -o dist/style.css -w",

@@ -1,36 +1,68 @@
 # PostCSS Demo Setup
 
-From Brad Traversy video [PostCSS Crash Course](https://youtu.be/SP8mSVSAh6s), Oct 26, 2022 - [his repo](https://github.com/bradtraversy/postcss-crash)
+Lnks: 
 
-NOTE: It's odd how you have to create files and folders in `dist`!!!
+1. [Postcss docs](https://postcss.org/docs/)
+1. [Postcss plugins](https://postcss.org/docs/postcss-plugins)
+1. [Postcss plugins 2](https://www.postcss.parts/)
+1. [PostCSS on GitHub](https://github.com/postcss/postcss)
+1. [PostCSS with Parcel](https://github.com/postcss/postcss#parcel)
+1. [PostCSS with npm scripts](https://github.com/postcss/postcss#npm-scripts)
+1. [What It Really Is And What It Really Does](https://davidtheclark.com/its-time-for-everyone-to-learn-about-postcss/)
+1. [Postcss Guides](https://webdesign.tutsplus.com/series/postcss-deep-dive--cms-889)
 
-## Basic overview
+<a id="back-to-top"></a>
 
-- It's integrated into tools like next.js, Parcel, Webpack, Gulp, and others
-- It's a tool for transforming y our CSS using JS plugins - go to postcss.parts - it's not a preprocessor like SASS
-- It parses your CSS strings as JS objects - Abstract Syntax Tree - it makes it easy to make your own Postcss plugins
-- Common plugins: autoprefixer, postcss-preset-env, stylelint, cssnano,
-- LINKS: [PostCSS on GitHub](https://github.com/postcss/postcss) and [PostCSS docs](https://postcss.org/docs/)
+## Table of contents
 
-Parcel has built-in PostCSS support. It already uses Autoprefixer and cssnano. If you want to change plugins, create `postcss.config.js` in project’s root:
+1. [Overview](#overview)
+1. [Installation and setup](#installation-and-setup)
+1. [Plugins](#plugins)
+   1. [PostCSS Config File](#postcss-config-file)
+   1. [postcss-import](#postcss-import)
+   1. [Autoprefixer](#autoprefixer)
+   1. [Postcss Preset Env](#postcss-preset-env)
+   1. [Precss](#precss)
+   1. [CSSNano](#cssnano)
+   1. [Postcss Assets](#postcss-assets)
+   1. [postcss-nested](#postcss-nested)
+   1. [Stylelint](#stylelint)
 
-```js
-module.exports = {
-  plugins: [require("autoprefixer"), require("postcss-nested")]
-};
-```
+## Overview
+
+- It's all about the plugins
+- It's integrated into tools like _Next.js_, _Vite_, _Parcel_, _Webpack_, _Gulp_, and others
+- It's a tool for transforming your CSS using JS plugins 
+- It's not a preprocessor like SASS - no eexternal compiler needed
+- It takes your CSS and converts it into an AST (_Abstract Syntax Tree_) and parses your CSS strings as JavaScript Objects
+- Postcss has an API that allows JavaScript plugins to access the AST 
+- It parses your CSS strings as JavaScript objects - Abstract Syntax Tree 
+- It makes it easy to make your own Postcss plugins
+- You can use CSS and get the SASS functionality like importing modules
+- Kevin Powell has: `src/style.css` and folders names `base` (base.css, reset.css), `components` (buttons.css), and `utilities` (container.css, flex.css, font-sizes.css)
+
+> Kevin Powell email: he uses PostCSS and his fav plugins: `purgeCSS` and `postcss-preset-env` - he uses `gulp` in a lot of his videos
+
+<div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
 
 ## Installation and setup
 
+```bash
+npm init -y
+npm i -D postcss postcss-cli
+```
+
 - Run `npm init -y`
 - Then `npm i -D postcss postcss-cli`
-- Create a folder `src`, inside it `input.css`,
-- Create another folder for the output named `dist`
-- In `package.json` create a script - you to to have the CLI installed to do this
+- Create a folder `src`, inside it create `input.css`
+- Create another folder for the output named `dist` (why did he create this?)
+- In `package.json` create a script - you have to have the CLI installed for this
 - Call it `build:css` and you add `postcss [source file] -o [output file]` where `-o` is for Output
 - Or `postcss src/input.css -o dist/style.css` and that will build it
 - If you just use this script, every time you edit your CSS you will have to run `npm run build:css` in order for it to build, but it has a `--watch` flag you can use though he used `-w`
-- Add some CSS rules then `npm run build:css` and then style.css is created in the dist folder and that is the file you would include in your HTML
+- Add some CSS rules then `npm run build:css` and then `style.css` is created in the `dist` folder and that is the file you would include in your HTML
+- NOTE: It's odd how you have to create files and folders in `dist`!!!
+- Then in the `dist` folder create `index.html` and link to `style.css`
 
 > NOTE: what is a source map?
 
@@ -38,32 +70,94 @@ module.exports = {
 
 It is a mapping between the generated/transpiled/minified JavaScript file and one or more original source files. The main purpose of Sourcemaps is to aid debugging.
 
-From MDN: The `SourceMap` HTTP response header links generated code to a source map, enabling the browser to reconstruct the original source and present the reconstructed original in the debugger.
+> From MDN: The `SourceMap` HTTP response header links generated code to a source map, enabling the browser to reconstruct the original source and present the reconstructed original in the debugger.
 
-- Then in the `dist` folder create `index.html` and link to `style.css`
+<div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
 
-## Installing plugins
+## Plugins
 
-Basics on Plugins: 1) Install it, 2) Add it to the config file, 3) Add options if necessary
+Basics on Plugins: 
 
-### Installing Autoprefixer
+1. Install it, 
+2. Add it to the config file in the `plugins` array with `require`,
+3. Add options if necessary `()` after `require('plugin-name')`
+
+Popular plugins:
+
+**_postcss-cli_**: To use PostCSS from your command-line interface or with npm scripts in `package.json`, or when you have a static site build - [npm on postcss-cli](https://www.npmjs.com/package/postcss-cli)
+
+1. _Autoprefixer_: generates vendor prefixes
+1. _postcss-preset-env_: allows you to use cutting-edge CSS features
+1. _precss_: Use SASS-like syntax
+1. _Stylelint_: Linting for your styles to avoid errors
+1. _PostCSS Assets_: asset manager
+1. _CSSNano_: optimize and minify CSS
+1. _postcss-import_: import CSS modules
+1. _postcss-nested_: for SASS-like nesting
+
+
+### PostCSS Config File
+
+- After installing a plugin you need to install it to your config so you need to create that file in the root and name it `postcss.config.js`
+- In there you want `module.exports` object and in there a `plugins` array where each entry is a require function for each plugin
+
+> Parcel has built-in PostCSS support. It already uses _Autoprefixer_ and _cssnano_. If you want to change plugins, create `postcss.config.js` in project’s root
+
+```js
+module.exports = {
+  plugins: [
+    require("autoprefixer"), 
+    require("postcss-nested")
+    ]
+};
+```
+
+<div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
+
+### postcss-import
+
+- `npm i -D postcss-import` and add to the config file in t he `plugins` array
+- In `src` create `vars.css`, add your variables in there, then in the main file import that file via `@import "vars";`
+- Run `npm run watch:css` - do I have to open with Liveserver?
+- Create some more variables then create `card.css` and add some styles 
+- Then import that into the main file but make sure to have `vars` as the first import so you can use it in all other files
+- To use this you need a file in the root named `postcss.config.js`
+- Then in `style.css` add `@import 'foldername/filename.css';` for each file
+
+Then in package.json:
+
+```json
+  "scripts": {
+    "postcss:watch": "postcss src/style.css --dir dist --watch",
+    "build:css": "postcss src/input.css -o dist/style.css"
+  },
+```
+
+- NOTE: `-d` can be substituted for `--dir` and `-w` for `--watch`
+- Then `npm run postcss:watch`
+
+<div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
+
+### Autoprefixer
 
 - Install Autoprefixer `npm i -D autoprefixer`
-- After installing a plugin you need to install it to y our config so you need to create that file in the root and name it `postcss.config.js`
-- In there you want `module.exports` object and in there a `plugins` array where each entry is a require fx for each plugin
-- The autoprefixer plugin uses the caniuse website - test it with the attribute and pseudo element of `::placeholder` so add a form element with an input
-- Then add a css rule for it in input.css - run `npm run build:css` - works!
+- The autoprefixer plugin uses the **caniuse** website - test it with the attribute and pseudo element of `::placeholder` so add a form element with an input
+- Then add a css rule for it in `input.css` - run `npm run build:css` - works!
 - Instead run `npm run watch:css`
 
-### Installing Postcss Preset Env
+<div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
 
-- Install postcss-preset-env which allows you to the cutting edge features of CSS which aren't yet implemented in browsers (why use it then?)
+### Postcss Preset Env
+
+- Install `postcss-preset-env` which allows you to the cutting edge features of CSS which aren't yet implemented in browsers
+- You need options for some things - `stage` 2 is the default, `stage` 1 gives you nesting, e.g.:
 - `CTRL+C` then `npm i -D postcss-preset-env` then add it to the config file
-- This plugin does take options which you have to add to the config file - he wants to define the `stage`
-- NOTE: the syntax is really odd for the options
-- CSS and JS come out in different stages and the default I think is `2` so he is using `1`
+- This plugin take options which you have to add to the config file - define the `stage`
+- **NOTE**: the syntax is really odd for the options
+- CSS and JS come out in different stages and the default I think is `2` so use `1`
 - Anytime you change your config file you have to restart the watch command
-- He is using some new CSS features: 1) custom selector, 2) custom media queries, 3) nesting but you need to add `&`
+- CSS features: 1) custom selector, 2) custom media queries, 3) nesting but you need to add `& h2` or whatever the selector is
+- You need the ampersand in CSS not with SASS though in SASS you use `&-`
 
 ```css
 @custom-selector :--heading h1, h2, h3, h4, h5;
@@ -77,9 +171,22 @@ Basics on Plugins: 1) Install it, 2) Add it to the config file, 3) Add options i
 }
 ```
 
-### Installing Precss
+Nesting: 
 
-- The next plugin gives you the same syntax as SASS and you don't need `&`
+```css
+nav {
+  padding: 1rem;
+  & ul {
+    margin: 0;
+  }
+}
+```
+
+<div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
+
+### Precss
+
+- This plugin gives you the same syntax as SASS and you don't need `&`
 - `CTRL+C` then `npm i -D precss` then add it to the config file
 - Then `npm run watch:css` but you will get a message:
 
@@ -92,22 +199,23 @@ Basics on Plugins: 1) Install it, 2) Add it to the config file, 3) Add options i
 ```
 
 - You can still use it, they just haven't done the update yet
-- As in SASS, variables go in their own file - need a new plugin
+- As in SASS, variables go in their own file
 
-### Installing Postcss Import
+<div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
 
-- `npm i -D postcss-import` - 25:10
-- in `src` create `vars.css`, add your variables in there, then in the main file import t hat file via `@import "vars";`
-- run `npm run watch:css` - do I have to open with Liveserver?
-- create some more variables then create `card.css` and add some styles then import that into the main file but make sure to have `vars` as the first import so you can use it in all other files
+### CSSNano
 
-### Installing Postcss Assets
+- `npm i -D cssnano` to optimize and minify your CSS with options of `preset` set to default (what does that do?)
+- `cssnano` minifies the output CSS file - just run `npm run postcss:watch`
+
+### Postcss Assets
 
 - `CTRL+C` then `npm i -D postcss-assets` - it allows you to manage your images and other assets
-- it takes options so parens and curly brackets, `({})` directly after the closing parens for `require`
-- add `loadPaths` and set it to `dist/img` in an array - then add a logo or something to it
-- he is using it as a bg img and a function called `resolve("img-filename")` then he used `width("img-filename")` - looks like crap - can also do `height()`
-- I'm removing that css but here it is:
+- It takes options so parens and curly brackets, `({})` directly after the closing parens for `require`
+- Add `loadPaths` and set it to `dist/img` in an array 
+- Create an `img` folder in `dist` then add a logo or something to it
+- Try using it as a bg img and a function called `resolve("img-filename")` then use a width function: `width("img-filename")` - looks like crap - can also do `height()` - looks better without the width fx
+- I'm removing that CSS but here it is:
 
 ```scss
 .card {
@@ -126,6 +234,17 @@ Basics on Plugins: 1) Install it, 2) Add it to the config file, 3) Add options i
 }
 ```
 
-### Installing CSS Nano
+<div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
 
-- `npm i -D cssnano` to optimize and minify your CSS with options of `preset`
+### postcss-nested
+
+- Isn't `postcss-nested` for nesting? Why use this if you have `postcss-preset-env`?
+
+### Stylelint
+
+Link: [Stylelint](https://stylelint.io/)
+
+- A mighty, modern linter that helps you avoid errors and enforce conventions in your styles
+- You can lint CSS files by using the standard config and everything else by using extensions written by the community
+
+<div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
