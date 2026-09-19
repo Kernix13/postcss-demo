@@ -1,6 +1,6 @@
 # PostCSS Demo Setup
 
-Lnks: 
+Lnks:
 
 1. [Postcss docs](https://postcss.org/docs/)
 1. [Postcss plugins](https://postcss.org/docs/postcss-plugins)
@@ -32,11 +32,11 @@ Lnks:
 
 - It's all about the plugins
 - It's integrated into tools like _Next.js_, _Vite_, _Parcel_, _Webpack_, _Gulp_, and others
-- It's a tool for transforming your CSS using JS plugins 
+- It's a tool for transforming your CSS using JS plugins
 - It's not a preprocessor like SASS - no eexternal compiler needed
 - It takes your CSS and converts it into an AST (_Abstract Syntax Tree_) and parses your CSS strings as JavaScript Objects
-- Postcss has an API that allows JavaScript plugins to access the AST 
-- It parses your CSS strings as JavaScript objects - Abstract Syntax Tree 
+- Postcss has an API that allows JavaScript plugins to access the AST
+- It parses your CSS strings as JavaScript objects - Abstract Syntax Tree
 - It makes it easy to make your own Postcss plugins
 - You can use CSS and get the SASS functionality like importing modules
 - Kevin Powell has: `src/style.css` and folders names `base` (base.css, reset.css), `components` (buttons.css), and `utilities` (container.css, flex.css, font-sizes.css)
@@ -76,9 +76,9 @@ It is a mapping between the generated/transpiled/minified JavaScript file and on
 
 ## Plugins
 
-Basics on Plugins: 
+Basics on Plugins:
 
-1. Install it, 
+1. Install it,
 2. Add it to the config file in the `plugins` array with `require`,
 3. Add options if necessary `()` after `require('plugin-name')`
 
@@ -95,7 +95,6 @@ Popular plugins:
 1. _postcss-import_: import CSS modules
 1. _postcss-nested_: for SASS-like nesting
 
-
 ### PostCSS Config File
 
 - After installing a plugin you need to install it to your config so you need to create that file in the root and name it `postcss.config.js`
@@ -105,10 +104,7 @@ Popular plugins:
 
 ```js
 module.exports = {
-  plugins: [
-    require("autoprefixer"), 
-    require("postcss-nested")
-    ]
+  plugins: [require('autoprefixer'), require('postcss-nested')],
 };
 ```
 
@@ -119,7 +115,7 @@ module.exports = {
 - `npm i -D postcss-import` and add to the config file in t he `plugins` array
 - In `src` create `vars.css`, add your variables in there, then in the main file import that file via `@import "vars";`
 - Run `npm run watch:css` - do I have to open with Liveserver?
-- Create some more variables then create `card.css` and add some styles 
+- Create some more variables then create `card.css` and add some styles
 - Then import that into the main file but make sure to have `vars` as the first import so you can use it in all other files
 - To use this you need a file in the root named `postcss.config.js`
 - Then in `style.css` add `@import 'foldername/filename.css';` for each file
@@ -171,7 +167,7 @@ Then in package.json:
 }
 ```
 
-Nesting: 
+Nesting:
 
 ```css
 nav {
@@ -212,7 +208,7 @@ nav {
 
 - `CTRL+C` then `npm i -D postcss-assets` - it allows you to manage your images and other assets
 - It takes options so parens and curly brackets, `({})` directly after the closing parens for `require`
-- Add `loadPaths` and set it to `dist/img` in an array 
+- Add `loadPaths` and set it to `dist/img` in an array
 - Create an `img` folder in `dist` then add a logo or something to it
 - Try using it as a bg img and a function called `resolve("img-filename")` then use a width function: `width("img-filename")` - looks like crap - can also do `height()` - looks better without the width fx
 - I'm removing that CSS but here it is:
@@ -223,10 +219,10 @@ nav {
   margin-top: 1.25rem;
   border: $borderWidth solid $borderColor;
   width: 31.25rem;
-  background-image: resolve("kernix-logo6-90.png");
+  background-image: resolve('kernix-logo6-90.png');
   background-repeat: no-repeat;
   background-position: center;
-  width: width("kernix-logo6-90.png");
+  width: width('kernix-logo6-90.png');
 
   h2 {
     color: green;
@@ -248,3 +244,56 @@ Link: [Stylelint](https://stylelint.io/)
 - You can lint CSS files by using the standard config and everything else by using extensions written by the community
 
 <div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
+
+## New video
+
+Video: How to use PostCSS (the ultimate CSS Tool!) by Coding in Public
+
+- no need to write SCSS and we can handle older browsers and use modern CSS
+- you can use modules and imports - can also do linting - all done with plugins
+- most build tools have some kind of PostCSS extension, e.g. Vite, Parcel, etc
+- they have 100's of plugins -
+
+### Plugins
+
+1. postcss-import: you do not want to use import statements in CSS unless you are using this plugin - it compiles all the imports into a single file - way more performant: `npm install -D postcss-import`
+2. autopreficer: for vendor prefixes -
+3. cssnano: for minifying your files - comments, spaces
+4. PostCSS Mixins: for adding sass mixins in your .css files -
+5. PostCSS Nested: so you can nest like in SASS - great for BEM as well
+6. PostCSS Media MinMax: simpler syntax
+7. PostCSS Custom Media:
+8. postcss-preset-env: it includes 30+ smaller plugins
+
+### Setup using Vite
+
+[VITE.JS](https://vitejs.dev/)
+
+Run `npm create vite@latest` - need a file called `vite.config.js` - vite has a setting to minify your HTML (see note below) and CSS Nano from PostCSS minifies the CSS but I think Tailwind may also do that
+
+NOTE: be breaks up his tailwind classes be ENTER so it is easier to read
+
+- he pretty much installed all of them at the same time
+- install the PostCSS Language Support extension
+- create postcss.config.js - inside add `module.exports = { plugins: []}` then just add the plugins you want to use
+-
+- some of the plugins require something additional, but his syntax is different:
+
+```js
+module.exports = {
+  plugins: {
+    autoprefixer: {},
+    'postcss-import': {},
+    'postcss-mixins': {},
+    'postcss-custom-media': {},
+    'postcss-media-minmax': {},
+    'postcss-preset-env': {
+      stage: 1,
+    },
+  },
+};
+```
+
+> Inside the plugins array I use require("autoprefixer") whereas you use autoprefixer: {}. Is there a difference if which method you use
+
+> Answer: Yeah, it depends if it’s a common js module basically
