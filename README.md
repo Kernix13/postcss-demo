@@ -15,6 +15,8 @@ Lnks:
 
 ## Table of contents
 
+> I need to fix this table
+
 1. [Overview](#overview)
 1. [Installation and setup](#installation-and-setup)
 1. [Plugins](#plugins)
@@ -33,7 +35,7 @@ Lnks:
 - It's all about the plugins
 - It's integrated into tools like _Next.js_, _Vite_, _Parcel_, _Webpack_, _Gulp_, and others
 - It's a tool for transforming your CSS using JS plugins
-- It's not a preprocessor like SASS - no eexternal compiler needed
+- It's not a preprocessor like SASS - no external compiler needed
 - It takes your CSS and converts it into an AST (_Abstract Syntax Tree_) and parses your CSS strings as JavaScript Objects
 - Postcss has an API that allows JavaScript plugins to access the AST
 - It parses your CSS strings as JavaScript objects - Abstract Syntax Tree
@@ -54,23 +56,32 @@ npm i -D postcss postcss-cli
 
 - Run `npm init -y`
 - Then `npm i -D postcss postcss-cli`
-- Create a folder `src`, inside it create `input.css`
-- Create another folder for the output named `dist` (why did he create this?)
+- File Structure: Create a folder `src`, inside it create `input.css`
+- Create another folder for the output named `dist` (he did not need to create this)
+
+### Build & Watch Scripts
+
 - In `package.json` create a script - you have to have the CLI installed for this
 - Call it `build:css` and you add `postcss [source file] -o [output file]` where `-o` is for Output
 - Or `postcss src/input.css -o dist/style.css` and that will build it
-- If you just use this script, every time you edit your CSS you will have to run `npm run build:css` in order for it to build, but it has a `--watch` flag you can use though he used `-w`
+- If you just use this script, every time you edit your CSS you will have to run `npm run build:css` in order for it to build,
+  - postcss has a `--watch` flag you can use though he used `-w` (see below for `watch:css`)
 - Add some CSS rules then `npm run build:css` and then `style.css` is created in the `dist` folder and that is the file you would include in your HTML
-- NOTE: It's odd how you have to create files and folders in `dist`!!!
-- Then in the `dist` folder create `index.html` and link to `style.css`
+- Then in the `dist` folder create `index.html` and link to `style.css` - style.css is the output file, don't link to the imput file
 
-> NOTE: what is a source map?
+```json
+{
+  "scripts": {
+    "watch:css": "postcss src/input.css -o dist/style.css -w",
+    "build:css": "postcss src/input.css -o dist/style.css"
+  }
+}
+```
 
-`SourceMap`: a file that maps from the transformed source to the original source, enabling the browser to reconstruct the original source and present the reconstructed original in the debugger | ...a file that maps from the transformed source to the original source.
-
-It is a mapping between the generated/transpiled/minified JavaScript file and one or more original source files. The main purpose of Sourcemaps is to aid debugging.
-
-> From MDN: The `SourceMap` HTTP response header links generated code to a source map, enabling the browser to reconstruct the original source and present the reconstructed original in the debugger.
+```sh
+npm run watch:css
+npm run build:css
+```
 
 <div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
 
@@ -89,11 +100,39 @@ Popular plugins:
 1. _Autoprefixer_: generates vendor prefixes
 1. _postcss-preset-env_: allows you to use cutting-edge CSS features
 1. _precss_: Use SASS-like syntax
-1. _Stylelint_: Linting for your styles to avoid errors
-1. _PostCSS Assets_: asset manager
+1. _Stylelint_: Linting for your styles to avoid errors (CSS linter)
+1. _PostCSS Assets_: asset manager. define load paths like for background images
 1. _CSSNano_: optimize and minify CSS
 1. _postcss-import_: import CSS modules
 1. _postcss-nested_: for SASS-like nesting
+
+## Autoprefixer & Plugin Config
+
+```sh
+npm i -D autoprefixer
+```
+
+- in root create `postcss.config.js`:
+
+```js
+module.exports = {
+  plugins: [require('autoprefixer')],
+};
+```
+
+- autoprefixer uses caniuse.com
+
+### postcss-preset-env
+
+- postcss-preset-env: use new CSS features
+- whenever you change the config file you have to restart the watch
+- CTRL+C then:
+
+```sh
+npm i -D postcss-preset-env
+```
+
+- then add to config file and add option of stage: 1
 
 ### PostCSS Config File
 
@@ -107,30 +146,6 @@ module.exports = {
   plugins: [require('autoprefixer'), require('postcss-nested')],
 };
 ```
-
-<div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
-
-### postcss-import
-
-- `npm i -D postcss-import` and add to the config file in t he `plugins` array
-- In `src` create `vars.css`, add your variables in there, then in the main file import that file via `@import "vars";`
-- Run `npm run watch:css` - do I have to open with Liveserver?
-- Create some more variables then create `card.css` and add some styles
-- Then import that into the main file but make sure to have `vars` as the first import so you can use it in all other files
-- To use this you need a file in the root named `postcss.config.js`
-- Then in `style.css` add `@import 'foldername/filename.css';` for each file
-
-Then in package.json:
-
-```json
-  "scripts": {
-    "postcss:watch": "postcss src/style.css --dir dist --watch",
-    "build:css": "postcss src/input.css -o dist/style.css"
-  },
-```
-
-- NOTE: `-d` can be substituted for `--dir` and `-w` for `--watch`
-- Then `npm run postcss:watch`
 
 <div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
 
@@ -154,6 +169,8 @@ Then in package.json:
 - Anytime you change your config file you have to restart the watch command
 - CSS features: 1) custom selector, 2) custom media queries, 3) nesting but you need to add `& h2` or whatever the selector is
 - You need the ampersand in CSS not with SASS though in SASS you use `&-`
+
+> I think the custom selector example sucks
 
 ```css
 @custom-selector :--heading h1, h2, h3, h4, h5;
@@ -182,6 +199,8 @@ nav {
 
 ### Precss
 
+> SKIP THIS PLUG BECAUSE I HATE SASS (AND NO ONE USES IT ANYMORE)
+
 - This plugin gives you the same syntax as SASS and you don't need `&`
 - `CTRL+C` then `npm i -D precss` then add it to the config file
 - Then `npm run watch:css` but you will get a message:
@@ -199,6 +218,30 @@ nav {
 
 <div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
 
+### postcss-import
+
+- `npm i -D postcss-import` and add to the config file in t he `plugins` array
+- In `src` create `vars.css`, add your variables in there, then in the main file import that file via `@import "vars";`
+- Run `npm run watch:css` - do I have to open with Liveserver?
+- Create some more variables then create `card.css` and add some styles
+- Then import that into the main file but make sure to have `vars` as the first import so you can use it in all other files
+- To use this you need a file in the root named `postcss.config.js`
+- Then in `style.css` add `@import 'foldername/filename.css';` for each file
+
+Then in package.json:
+
+```json
+  "scripts": {
+    "postcss:watch": "postcss src/style.css --dir dist --watch",
+    "build:css": "postcss src/input.css -o dist/style.css"
+  },
+```
+
+- NOTE: `-d` can be substituted for `--dir` and `-w` for `--watch`
+- Then `npm run postcss:watch`
+
+<div align="right"><a href="#back-to-top" title="Table of Contents">Back to Top</a></div>
+
 ### CSSNano
 
 - `npm i -D cssnano` to optimize and minify your CSS with options of `preset` set to default (what does that do?)
@@ -210,7 +253,7 @@ nav {
 - It takes options so parens and curly brackets, `({})` directly after the closing parens for `require`
 - Add `loadPaths` and set it to `dist/img` in an array
 - Create an `img` folder in `dist` then add a logo or something to it
-- Try using it as a bg img and a function called `resolve("img-filename")` then use a width function: `width("img-filename")` - looks like crap - can also do `height()` - looks better without the width fx
+- Try using it as a bg img and a function called resolve(): `resolve("img-filename")` then use a width function: `width("img-filename")` - looks like crap - can also do `height()` - looks better without the width fx
 - I'm removing that CSS but here it is:
 
 ```scss
